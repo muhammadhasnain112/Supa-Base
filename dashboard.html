@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dashboard</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #e3f2fd, #f9f9f9);
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .dashboard-container {
+      background-color: white;
+      padding: 30px 40px;
+      border-radius: 16px;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+      width: 90%;
+      max-width: 400px;
+      text-align: center;
+    }
+
+    #h3 {
+      font-size: 20px;
+      font-weight: 600;
+      color: #333;
+      margin-bottom: 20px;
+    }
+
+    button {
+      padding: 12px 24px;
+      font-size: 16px;
+      font-weight: bold;
+      background-color: #ff5252;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    button:hover {
+      background-color: #d62828;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="dashboard-container">
+    <h3 id="h3">Loading...</h3>
+    <button onclick="logout()">Log Out</button>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+  <script>
+    const supabaseUrl = 'https://ipoviueuhflhqjemgfkw.supabase.co';
+    const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imlwb3ZpdWV1aGZsaHFqZW1nZmt3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTI5Mzc5NzEsImV4cCI6MjA2ODUxMzk3MX0.ACNfp4MRa7-r1YYmu04VDltBo5UudrKWWw2NyDPBrk0';
+    const supa = supabase.createClient(supabaseUrl, supabaseKey);
+
+    async function logout() {
+      const { error } = await supa.auth.signOut();
+      if (error) {
+        alert(error.message || 'Logout error');
+      } else {
+        alert('Account Logged Out');
+        window.location.href = `login.html`;
+      }
+    }
+
+    const h3 = document.getElementById('h3');
+
+    async function token() {
+      const { data, error } = await supa.auth.getSession();
+
+      if (error || !data.session) {
+        window.location.href = `login.html`;
+        return;
+      }
+
+      h3.textContent = `Welcome, ${data.session.user.email}`;
+    }
+
+    token();
+  </script>
+</body>
+
+</html>
