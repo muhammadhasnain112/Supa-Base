@@ -59,6 +59,7 @@
     }
 
     button {
+      margin-bottom: 10px;
       width: 100%;
       padding: 12px;
       background-color: #ff5252;
@@ -91,6 +92,9 @@
     .login-text a:hover {
       text-decoration: underline;
     }
+    #p{
+      font-size: large;
+    }
   </style>
 </head>
 
@@ -104,7 +108,9 @@
     <label for="pass">Password</label>
     <input type="password" id="c-pass" placeholder="Enter your password" />
 
+    <p id="p"></p>
     <button onclick="signUp()">Sign Up</button>
+    <button onclick="google()">Connect With Google</button>
 
     <div class="login-text">
       Already have an account? <a href="login.html">Login</a>
