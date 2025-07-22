@@ -16,7 +16,7 @@ async function signUp() {
         alert(error.message)
     } else {
         alert('Please Verify Email')
-        location.href = `login.html`
+        window.location.href = `login.html`
     }
 }
 
@@ -39,22 +39,22 @@ async function login() {
 
 
 
+
+
 async function google() {
-    p.innerText = 'Loading...'
+    
     const { data, error } = await supa.auth.signInWithOAuth({
         provider: 'google',
         options: {
-            redirectTo: 'https://www.w3schools.com'
+            redirectTo: 'https://muhammadhasnain112.github.io/Supa-Base/dashboard.html'
         }
     })
-    p.innerText = ''
     if (error) {
         alert(error.message)
     } else {
-        alert('Sucessfuly Login')
-
-        console.log('data',data);
-        
         // location.href = `dashboard.html`
+        console.log('data',data);
+        alert('Sucessfuly Login')
+        
     }
 }
