@@ -53,11 +53,43 @@
     button:hover {
       background-color: #d62828;
     }
+    #loader {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(255, 255, 255, 0.7);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 9999;
+      display: none;
+      /* hidden by default */
+    }
+
+    /* Spinner */
+    .spinner {
+      width: 50px;
+      height: 50px;
+      border: 5px solid #ccc;
+      border-top: 5px solid #007bff;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
   </style>
 </head>
 
 <body>
-
+  <div id="loader">
+    <div class="spinner"></div>
+  </div>
   <div class="dashboard-container">
     <h3 id="h3">Loading...</h3>
     <button onclick="logout()">Log Out</button>
@@ -71,12 +103,14 @@
     const supa = supabase.createClient(supabaseUrl, supabaseKey);
 
     async function logout() {
+      document.getElementById("loader").style.display = "flex";
       const { error } = await supa.auth.signOut();
+      document.getElementById("loader").style.display = "none";
       if (error) {
         alert(error.message || 'Logout error');
       } else {
         alert('Account Logged Out');
-        window.location.href = `login.html`;
+        window.location.href = `index.html`;
       }
     }
 
@@ -86,7 +120,7 @@
       const { data, error } = await supa.auth.getSession();
 
       if (error || !data.session) {
-        window.location.href = `login.html`;
+        window.location.href = `index.html`;
         return;
       }
 
