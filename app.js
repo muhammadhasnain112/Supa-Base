@@ -78,21 +78,6 @@ function visiblePass() {
     let visible = document.getElementById('visible')
     if (flag) {
         visible.src = `img/visible.png`
-        cpassword.type = `text`
-        flag = false
-    } else {
-        visible.src = `img/invisible.png`
-        cpassword.type = `password`
-        flag = true
-    }
-}
-
-
-
-function SignUpvisiblePass() {
-    let visible = document.getElementById('visible')
-    if (flag) {
-        visible.src = `img/visible.png`
         password.type = `text`
         flag = false
     } else {
@@ -100,4 +85,20 @@ function SignUpvisiblePass() {
         password.type = `password`
         flag = true
     }
+}
+
+
+
+let flag1 = true
+function SignUpvisiblePass() {
+    let visible = document.getElementById('visible')
+    if (flag1) {
+        visible.src = `img/visible.png`
+        cpassword.type = `text`
+        flag1 = false
+    } else {
+        visible.src = `img/invisible.png`
+        cpassword.type = `password`
+        flag1 = true
+    }1
 }
