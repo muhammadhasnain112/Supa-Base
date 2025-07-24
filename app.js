@@ -3,7 +3,7 @@ const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZS
 const supa = supabase.createClient(supabaseUrl, supabaseKey)
 // let aemail = 'muhammadhasnain1213@sa'
 // let Name = aemail.split('@')[0]
-console.log(Name);
+// console.log(Name);
 
 
 token();
