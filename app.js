@@ -1,6 +1,10 @@
 const supabaseUrl = 'https://ipoviueuhflhqjemgfkw.supabase.co'
 const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imlwb3ZpdWV1aGZsaHFqZW1nZmt3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTI5Mzc5NzEsImV4cCI6MjA2ODUxMzk3MX0.ACNfp4MRa7-r1YYmu04VDltBo5UudrKWWw2NyDPBrk0'
 const supa = supabase.createClient(supabaseUrl, supabaseKey)
+// let aemail = 'muhammadhasnain1213@sa'
+// let Name = aemail.split('@')[0]
+console.log(Name);
+
 
 token();
 async function token() {
@@ -58,7 +62,7 @@ async function google() {
             redirectTo: 'https://supabase.netlify.app/dashboard.html'
         }
     })
-        document.getElementById("loader").style.display = "none";
+    document.getElementById("loader").style.display = "none";
     if (error) {
         alert(error.message)
     } else {
@@ -103,5 +107,5 @@ function SignUpvisiblePass() {
         visible.src = `img/invisible.png`
         cpassword.type = `password`
         flag1 = true
-    }1
+    } 1
 }
