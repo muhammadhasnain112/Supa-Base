@@ -129,16 +129,16 @@
       if (error || !data.session) {
         window.location.href = `index.html`;
         return;
-      } else {
+      } 
         // console.log(data.session.user.user_metadata.picture);
-        if(data.session.user.email){
-          let email = data.session.user.email
+        if(data.session.user.user_metadata.picture){
           img.src = data.session.user.user_metadata.picture
         }
+        
+        let email = data.session.user.email
         let Name = email.match(/^[^0-9]+/)
         let nameslice = Name.slice(0,1).toUpperCase()+Name.slice(1)
         h3.textContent = `Welcome, ${nameslice}`;
-      }
     }
 
     token();
