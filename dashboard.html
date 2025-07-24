@@ -84,6 +84,9 @@
         transform: rotate(360deg);
       }
     }
+    #img{
+      border-radius: 50%;
+    }
   </style>
 </head>
 
@@ -92,6 +95,7 @@
     <div class="spinner"></div>
   </div>
   <div class="dashboard-container">
+    <img src="" alt="" id="img" width="100">
     <h3 id="h3">Loading...</h3>
     <button onclick="logout()">Log Out</button>
   </div>
@@ -116,6 +120,7 @@
     }
 
     const h3 = document.getElementById('h3');
+    const img = document.getElementById('img');
 
     async function token() {
       const { data, error } = await supa.auth.getSession();
@@ -124,9 +129,8 @@
         window.location.href = `index.html`;
         return;
       }else{
-
         console.log(data.session.user.user_metadata.picture);
-        
+        img.src = data.session.user.user_metadata.picture
         h3.textContent = `Welcome, ${data.session.user.email}`;
       }
     }
