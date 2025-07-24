@@ -130,10 +130,12 @@
         window.location.href = `index.html`;
         return;
       } else {
-        console.log(data.session.user.user_metadata.picture);
+        // console.log(data.session.user.user_metadata.picture);
         img.src = data.session.user.user_metadata.picture
         let email = data.session.user.email
-        h3.textContent = `Welcome, ${email.split('@')[0]}`;
+        let split = email.split('@')[0]
+        let slice = split.slice(0,1).toUpperCase()+split.slice(1)
+        h3.textContent = `Welcome, ${slice}`;
       }
     }
 
