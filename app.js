@@ -39,7 +39,7 @@ async function login() {
     })
     document.getElementById("loader").style.display = "none";
     if (error) {
-        alert(error.massage)
+        alert(error.message)
     } else {
         alert('Sucessfuly Login')
         window.location.href = `dashboard.html`
@@ -62,9 +62,12 @@ async function google() {
     if (error) {
         alert(error.message)
     } else {
-        // location.href = `dashboard.html`
-        console.log('data', data);
+        // console.log('data', data.user);
         alert('Sucessfuly Login')
+        // alert('Sucessfuly Login')
+        // alert('Sucessfuly Login')
+        // alert('Sucessfuly Login')
+        // window.location.href = `dashboard.html`
 
     }
 }
