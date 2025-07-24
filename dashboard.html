@@ -133,7 +133,7 @@
         // console.log(data.session.user.user_metadata.picture);
         img.src = data.session.user.user_metadata.picture
         let email = data.session.user.email
-        let split = email.split('@')[0]
+        let split = email.match(/^[^0-9]+/)
         let slice = split.slice(0,1).toUpperCase()+split.slice(1)
         h3.textContent = `Welcome, ${slice}`;
       }
