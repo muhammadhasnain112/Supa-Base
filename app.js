@@ -77,6 +77,7 @@ async function facebook() {
             redirectTo: 'https://supabase.netlify.app/dashboard.html'
         }
     })
+    localStorage.setItem('info',JSON.stringify(data))
     if (error) {
         alert(error.message)
     } else {
