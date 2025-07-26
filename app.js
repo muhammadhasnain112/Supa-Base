@@ -71,14 +71,12 @@ async function google() {
 }
 
 async function facebook() {
-    document.getElementById("loader").style.display = "flex";
     const { data, error } = await supa.auth.signInWithOAuth({
         provider: 'facebook',
         options: {
             redirectTo: 'https://supabase.netlify.app/dashboard.html'
         }
     })
-    document.getElementById("loader").style.display = "none";
     if (error) {
         alert(error.message)
     } else {
@@ -91,7 +89,6 @@ async function facebook() {
 
 let flag = true
 function visiblePass() {
-    // flag = true
     let visible = document.getElementById('visible')
     if (flag) {
         visible.src = `img/visible.png`

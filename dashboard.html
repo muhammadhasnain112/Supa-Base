@@ -95,7 +95,8 @@
   <div id="loader">
     <div class="spinner"></div>
   </div>
-  <div class="dashboard-container">
+  <div 
+  class="dashboard-container">
     <img src="" alt="" id="img" width="100">
     <h3 id="h3">Loading...</h3>
     <button onclick="logout()">Log Out</button>
@@ -123,25 +124,25 @@
     const h3 = document.getElementById('h3');
     const img = document.getElementById('img');
 
-    async function token() {
-      const { data, error } = await supa.auth.getSession();
+    // async function token() {
+    //   const { data, error } = await supa.auth.getSession();
 
-      if (error || !data.session) {
-        window.location.href = `index.html`;
-        return;
-      } 
-        // console.log(data.session.user.user_metadata.picture);
-        if(img.src = data.session.user.user_metadata.picture){
-          img.src = data.session.user.user_metadata.picture
-        }
-        let email = data.session.user.email
-        let split = email.split('@')[0] 
-        let slice = split.slice(0,1).toUpperCase()+split.slice(1)
-        h3.textContent = `Welcome, ${slice}`;
+    //   if (error || !data.session) {
+    //     window.location.href = `index.html`;
+    //     return;
+    //   } 
+    //     // console.log(data.session.user.user_metadata.picture);
+    //     if(img.src = data.session.user.user_metadata.picture){
+    //       img.src = data.session.user.user_metadata.picture
+    //     }
+    //     let email = data.session.user.email
+    //     let split = email.split('@')[0] 
+    //     let slice = split.slice(0,1).toUpperCase()+split.slice(1)
+    //     h3.textContent = `Welcome, ${slice}`;
       
-    }
+    // }
 
-    token();
+    // token();
   </script>
 </body>
 
