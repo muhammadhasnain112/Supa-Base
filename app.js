@@ -59,7 +59,7 @@ async function google() {
     const { data, error } = await supa.auth.signInWithOAuth({
         provider: 'google',
         options: {
-            redirectTo: 'http://127.0.0.1:5501/dashboard.html'
+            redirectTo: 'https://supabase.netlify.app/dashboard.html'
         }
     })
     document.getElementById("loader").style.display = "none";
@@ -75,7 +75,7 @@ async function facebook() {
     const { data, error } = await supa.auth.signInWithOAuth({
         provider: 'facebook',
         options: {
-            redirectTo: 'http://127.0.0.1:5501/dashboard.html'
+            redirectTo: 'https://supabase.netlify.app/dashboard.html'
         }
     })
     document.getElementById("loader").style.display = "none";
