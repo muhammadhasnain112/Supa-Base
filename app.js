@@ -59,20 +59,30 @@ async function google() {
     const { data, error } = await supa.auth.signInWithOAuth({
         provider: 'google',
         options: {
-            redirectTo: 'https://supabase.netlify.app/dashboard.html'
+            redirectTo: 'http://127.0.0.1:5501/dashboard.html'
         }
     })
     document.getElementById("loader").style.display = "none";
     if (error) {
         alert(error.message)
     } else {
-        // console.log('data', data.user);
         alert('Sucessfuly Login')
-        // alert('Sucessfuly Login')
-        // alert('Sucessfuly Login')
-        // alert('Sucessfuly Login')
-        // window.location.href = `dashboard.html`
+    }
+}
 
+async function facebook() {
+    document.getElementById("loader").style.display = "flex";
+    const { data, error } = await supa.auth.signInWithOAuth({
+        provider: 'facebook',
+        options: {
+            redirectTo: 'http://127.0.0.1:5501/dashboard.html'
+        }
+    })
+    document.getElementById("loader").style.display = "none";
+    if (error) {
+        alert(error.message)
+    } else {
+        alert('Sucessfuly Login')
     }
 }
 
