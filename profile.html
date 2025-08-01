@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Profile</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            display: flex;
+            min-height: 100vh;
+            background-color: #f0f2f5;
+            padding: 20px;
+            gap: 20px;
+            position: relative;
+            flex-wrap: wrap;
+        }
+
+        #togle {
+            width: 50px;
+            height: 50px;
+            background: #ffffff;
+            border-radius: 12px;
+            border: 2px solid #ccc;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+        }
+
+        #togle div {
+            width: 24px;
+            height: 3px;
+            background-color: #444;
+            margin: 3px 0;
+            transition: all 0.3s ease;
+        }
+
+        #showprofile {
+            width: 25%;
+            height: 45vh;
+            min-width: 260px;
+            background-color: #fff;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+        }
+
+        #showprofile img {
+            width: 90px;
+            height: 90px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid #0077ff;
+        }
+
+        #showprofile h1 {
+            font-size: 1.2rem;
+            font-weight: 600;
+        }
+
+        #showprofile p {
+            color: #555;
+        }
+
+        #showpost {
+            margin-top: 10vh;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        #showpost>div {
+            /* margin-top: 10vh; */
+            background: white;
+            padding: 15px 20px;
+            border-radius: 10px;
+            border-left: 6px solid #0077ff;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.08);
+        }
+
+        #showpost h2 {
+            color: #333;
+            margin-bottom: 6px;
+        }
+
+        #showpost p {
+            color: #555;
+            margin-bottom: 8px;
+        }
+
+        small {
+            color: #888;
+            margin-right: 12px;
+        }
+
+        button {
+            background-color: #0077ff;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #005ec2;
+        }
+
+        #logoutBtn {
+            position: absolute;
+            top: 25px;
+
+            /* border-radius: 20%; */
+            right: 25px;
+        }
+
+        #h1 {
+
+            position: absolute;
+            top: 20px;
+            left: 25%;
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #444;
+        }
+
+        @media screen and (max-width: 768px) {
+            body {
+                flex-direction: column;
+                padding: 15px;
+            }
+
+            #showprofile {
+                width: 100%;
+                flex-direction: row;
+                gap: 15px;
+                align-items: center;
+                padding: 15px;
+            }
+
+            #showprofile img {
+                width: 60px;
+                height: 60px;
+            }
+
+            #logoutBtn,
+            #h1 {
+                position: static;
+                margin-bottom: 10px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <button id="logoutBtn" onclick="logout()">Log Out</button>
+    <h1 id="h1"></h1>
+
+    <div id="showpost"></div>
+
+    <div id="showprofile">
+        <img src="" alt="">
+        <h1>Name :</h1>
+        <p>Email :</p>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script>
+        const supabaseUrl = 'https://ipoviueuhflhqjemgfkw.supabase.co'
+        const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imlwb3ZpdWV1aGZsaHFqZW1nZmt3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTI5Mzc5NzEsImV4cCI6MjA2ODUxMzk3MX0.ACNfp4MRa7-r1YYmu04VDltBo5UudrKWWw2NyDPBrk0'
+        const client = supabase.createClient(supabaseUrl, supabaseKey)
+        let id
+        const showPosts = document.getElementById('showpost')
+        const showprofile = document.getElementById('showprofile')
+
+        async function render() {
+            await Myinfo()
+            const { data, error } = await client
+                .from('user')
+                .select('*')
+                .eq('userid', id)
+            if (error) {
+                console.log(error.message)
+            } else {
+                showPosts.innerHTML = ''
+                data.forEach(element => {
+                    const date = element.created_at.slice(0, 10)
+                    const time = element.created_at.split('T')[1].split('.')[0]
+                    showPosts.innerHTML += `
+            <div>
+              <h2>${element.title}</h2>
+              <p>${element.discription}</p>
+              <small>${time}</small>
+              <small>${date}</small>
+              <br><br>
+              <button onclick="dlt(${element.id})">Delete</button>
+            </div>
+          `
+                })
+            }
+        }
+
+        async function Myinfo() {
+            const { error, data: { user } } = await client.auth.getUser()
+            if (error) {
+                alert(error.message)
+            } else {
+                id = user.id
+                document.getElementById('h1').textContent = `Welcome, ${user.user_metadata.name}`
+                showprofile.innerHTML = `
+          <img src="${user.user_metadata.avatar_url}" alt="">
+          <div>
+            <h1>Name : ${user.user_metadata.name}</h1>
+            <p>Email : ${user.user_metadata.email}</p>
+          </div>
+        `
+            }
+        }
+
+        render()
+
+        async function dlt(e) {
+            const { error } = await client.from('user').delete().eq('id', e)
+            if (error) {
+                alert(error.message)
+            } else {
+                render()
+            }
+        }
+
+        async function logout() {
+            const { error } = await client.auth.signOut()
+            if (error) {
+                alert(error.message)
+            } else {
+                window.location.href = 'index.html'
+            }
+        }
+    </script>
+</body>
+
+</html>

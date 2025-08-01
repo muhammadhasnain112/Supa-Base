@@ -8,141 +8,212 @@
   <style>
     * {
       box-sizing: border-box;
-      margin: 0;
-      padding: 0;
     }
 
     body {
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background: linear-gradient(135deg, #e3f2fd, #f9f9f9);
-      height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      padding: 20px;
+      margin: 0;
+      background-color: #0d1117;
+      color: #f0f6fc;
     }
 
-    .dashboard-container {
-      background-color: white;
-      padding: 30px 40px;
-      border-radius: 16px;
-      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
-      width: 90%;
-      max-width: 400px;
+    h1 {
       text-align: center;
+      margin-bottom: 10px;
     }
 
-    #h3 {
-      font-size: 20px;
-      font-weight: 600;
-      color: #333;
+    #h2 {
+      text-align: center;
       margin-bottom: 20px;
+      font-size: 1.2rem;
+      color: #58a6ff;
     }
 
     button {
-      padding: 12px 24px;
-      font-size: 16px;
-      font-weight: bold;
-      background-color: #ff5252;
+      background-color: #238636;
       color: white;
+      padding: 10px 20px;
       border: none;
-      border-radius: 8px;
+      margin: 10px 0;
+      border-radius: 5px;
       cursor: pointer;
-      transition: background-color 0.3s ease;
     }
 
     button:hover {
-      background-color: #d62828;
+      background-color: #2ea043;
     }
 
-    #loader {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100vw;
-      height: 100vh;
-      background: rgba(255, 255, 255, 0.7);
+    #showinputs {
       display: flex;
-      align-items: center;
-      justify-content: center;
-      z-index: 9999;
-      display: none;
-      /* hidden by default */
+      flex-direction: column;
+      gap: 10px;
+      max-width: 500px;
+      margin: 0 auto 30px;
     }
 
-    /* Spinner */
-    .spinner {
-      width: 50px;
-      height: 50px;
-      border: 5px solid #ccc;
-      border-top: 5px solid #007bff;
-      border-radius: 50%;
-      animation: spin 1s linear infinite;
+    #showinputs input,
+    #showinputs textarea {
+      padding: 10px;
+      border-radius: 5px;
+      border: 1px solid #30363d;
+      background-color: #161b22;
+      color: white;
+      resize: vertical;
     }
 
-    @keyframes spin {
-      to {
-        transform: rotate(360deg);
-      }
+    #showposts {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 20px;
+      margin-top: 20px;
     }
 
-    #img {
-      border-radius: 50%;
+    #showposts>div {
+      padding: 20px;
+      max-width: 40vw;
+      background-color: #161b22;
+      border-radius: 10px;
+      border: 1px solid #30363d;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
     }
+
+    #showposts h2 {
+      font-size: 1.1rem;
+      margin-bottom: 10px;
+      color: #58a6ff;
+    }
+
+    #showposts p {
+      font-size: 0.95rem;
+      line-height: 1.4;
+    }
+
+    .date {
+      float: right;
+    }
+   
   </style>
 </head>
 
 <body>
-  <div id="loader">
-    <div class="spinner"></div>
-  </div>
-  <div 
-  class="dashboard-container">
-    <img src="" alt="" id="img" width="100">
-    <h3 id="h3">Loading...</h3>
+
+
+  <h1>Posts</h1>
+  <h2 id="h2"></h2>
+  <div style="text-align:center;">
+    <button onclick="add()">Add Post</button>
+    <button onclick="CheckProfile()">Check Profile</button>
     <button onclick="logout()">Log Out</button>
   </div>
+  <div id="showinputs"></div>
+  <div id="showposts"></div>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
   <script>
-    const supabaseUrl = 'https://ipoviueuhflhqjemgfkw.supabase.co';
-    const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imlwb3ZpdWV1aGZsaHFqZW1nZmt3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTI5Mzc5NzEsImV4cCI6MjA2ODUxMzk3MX0.ACNfp4MRa7-r1YYmu04VDltBo5UudrKWWw2NyDPBrk0';
-    const supa = supabase.createClient(supabaseUrl, supabaseKey);
+    const supabaseUrl = 'https://ipoviueuhflhqjemgfkw.supabase.co'
+    const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imlwb3ZpdWV1aGZsaHFqZW1nZmt3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTI5Mzc5NzEsImV4cCI6MjA2ODUxMzk3MX0.ACNfp4MRa7-r1YYmu04VDltBo5UudrKWWw2NyDPBrk0'
+    const supa = supabase.createClient(supabaseUrl, supabaseKey)
 
-    async function logout() {
-      document.getElementById("loader").style.display = "flex";
-      const { error } = await supa.auth.signOut();
-      document.getElementById("loader").style.display = "none";
+    const h2 = document.getElementById("h2");
+    const showInputs = document.getElementById("showinputs");
+    const showPosts = document.getElementById("showposts");
+
+
+    function add() {
+      showInputs.innerHTML = `
+        <input type="text" placeholder="Enter a Title" id="title">
+        <textarea id="disc" rows="4" placeholder="Enter Description"></textarea>
+        <button onclick="upload()">Upload Post</button>
+      `
+    }
+
+
+
+    let ID
+    async function upload() {
+      async function Myinfo() {
+        const { error, data: { user } } = await supa.auth.getUser()
+        if (error) {
+          alert(error.message)
+        } else {
+          ID = user.id
+          // console.log(ID);
+
+
+        }
+      }
+
+      const title = document.getElementById('title');
+      const discription = document.getElementById('disc');
+
+      await Myinfo()
+      const { error, data } = await supa
+        .from('user')
+        .insert({ userid: ID, title: title.value, discription: discription.value, })
+        .select();
+
       if (error) {
-        alert(error.message || 'Logout error');
+        alert(error.message);
       } else {
-        alert('Account Logged Out');
-        window.location.href = `index.html`;
+        showInputs.innerHTML = '';
+        // console.log(ID);
+
+        showPost();
       }
     }
 
-    const h3 = document.getElementById('h3');
-    const img = document.getElementById('img');
 
-    async function token() {
-      const { data, error } = await supa.auth.getSession();
-
-      if (error || !data.session) {
-        // window.location.href = `index.html`;
-        // return;
-      } 
-        // console.log(data.session.user.user_metadata.picture);
-        if(img.src = data.session.user.user_metadata.picture){
-          img.src = data.session.user.user_metadata.picture
-        }
-        let email = data.session.user.email
-        let split = email.split('@')[0] 
-        let slice = split.slice(0,1).toUpperCase()+split.slice(1)
-        h3.textContent = `Welcome, ${slice}`;
-      
+    async function logout() {
+      const { error } = await supa.auth.signOut()
+      if (error) {
+        alert(error.message)
+      } else {
+        window.location.href = `index.html`
+      }
     }
 
-    token();
+
+
+
+
+
+    async function showPost() {
+      const { data, error } = await supa
+        .from('user')
+        .select('*');
+
+      if (error) {
+        alert(error.message);
+      } else {
+        showPosts.innerHTML = '';
+        data.forEach(element => {
+          let date = element.created_at.slice(0, 10);
+          // console.log(date);
+
+          const datetime = element.created_at;
+          const timeFull = datetime.split('T')[1];
+          const timeOnly = timeFull.split('.')[0];
+          // console.log(timeOnly);
+          showPosts.innerHTML += `
+            <div>
+              <h2>${element.title}</h2>
+              <p>${element.discription}</p>
+              <small>${timeOnly} </small> <small class="date"> ${date}</small>
+            </div>
+          `
+        });
+      }
+    }
+
+    showPost();
+
+
+    function CheckProfile() {
+      window.location.href = `profile.html`
+    }
+
+    // c770401c-dc51-4de6-ac35-41860bb0aa1c
   </script>
 </body>
 
