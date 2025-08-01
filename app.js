@@ -2,13 +2,6 @@ const supabaseUrl = 'https://ipoviueuhflhqjemgfkw.supabase.co'
 const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imlwb3ZpdWV1aGZsaHFqZW1nZmt3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTI5Mzc5NzEsImV4cCI6MjA2ODUxMzk3MX0.ACNfp4MRa7-r1YYmu04VDltBo5UudrKWWw2NyDPBrk0'
 const supa = supabase.createClient(supabaseUrl, supabaseKey)
 
-token();
-async function token() {
-    const { data, error } = await supa.auth.getSession();
-    if (data.session) {
-        window.location.href = `dashboard.html`;
-    }
-}
 
 
 let cemail = document.getElementById('c-email')
@@ -55,7 +48,7 @@ async function google() {
     const { data, error } = await supa.auth.signInWithOAuth({
         provider: 'google',
         options: {
-            redirectTo: 'http://127.0.0.1:5501/dashboard.html'
+            redirectTo: 'https://supabase.netlify.app/dashboard.html'
         }
     })
     document.getElementById("loader").style.display = "none";

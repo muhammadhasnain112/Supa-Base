@@ -92,7 +92,6 @@
     .date {
       float: right;
     }
-   
   </style>
 </head>
 
@@ -213,7 +212,14 @@
       window.location.href = `profile.html`
     }
 
-    // c770401c-dc51-4de6-ac35-41860bb0aa1c
+
+    token();
+    async function token() {
+      const { data, error } = await supa.auth.getSession();
+      if (!data.session) {
+        window.location.href = `index.html`;
+      }
+    }
   </script>
 </body>
 
