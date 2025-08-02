@@ -223,11 +223,15 @@
                 alert(error.message)
             } else {
                 id = user.id
-                document.getElementById('h1').textContent = `Welcome, ${user.user_metadata.name}`
+                console.log(user);
+
+                document.getElementById('h1').textContent = `Welcome, ${user.user_metadata.display_name
+                    }`
                 showprofile.innerHTML = `
           <img src="${user.user_metadata.avatar_url}" alt="">
           <div>
-            <h1>Name : ${user.user_metadata.name}</h1>
+            <h1>Name : ${user.user_metadata.display_name
+                    }</h1>
             <p>Email : ${user.user_metadata.email}</p>
           </div>
         `

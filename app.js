@@ -6,11 +6,18 @@ const supa = supabase.createClient(supabaseUrl, supabaseKey)
 
 let cemail = document.getElementById('c-email')
 let cpassword = document.getElementById('c-pass')
+let cname = document.getElementById('c-name')
 
 async function signUp() {
     document.getElementById("loader").style.display = "flex";
     const { data, error } = await supa.auth.signUp({
-        email: cemail.value, password: cpassword.value
+        email: cemail.value, password: cpassword.value,
+        options: {
+      data: {
+        display_name: cname.value,
+     
+      }
+    }
     })
     document.getElementById("loader").style.display = "none";
 
