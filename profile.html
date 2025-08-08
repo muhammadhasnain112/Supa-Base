@@ -19,6 +19,7 @@
             background-color: #f0f2f5;
             padding: 20px;
             gap: 20px;
+            /* background-color: ; */
             position: relative;
             flex-wrap: wrap;
         }
@@ -165,6 +166,11 @@
                 margin-bottom: 10px;
             }
         }
+
+        .showimage {
+            border-radius: 14px;
+
+        }
     </style>
 </head>
 
@@ -176,9 +182,6 @@
     <div id="showpost"></div>
 
     <div id="showprofile">
-        <img src="" alt="">
-        <h1>Name :</h1>
-        <p>Email :</p>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -205,38 +208,53 @@
                     const time = element.created_at.split('T')[1].split('.')[0]
                     showPosts.innerHTML += `
             <div>
+                <img alt="" width="70" src="${element.publicUrl}" class="showimage">
               <h2>${element.title}</h2>
               <p>${element.discription}</p>
               <small>${time}</small>
               <small>${date}</small>
               <br><br>
               <button onclick="dlt(${element.id})">Delete</button>
-            </div>
-          `
+              </div>
+              `
                 })
             }
         }
 
+
+
+
+
         async function Myinfo() {
-            const { error, data: { user } } = await client.auth.getUser()
-            if (error) {
-                alert(error.message)
+
+            const { error: userError, data: { user } } = await client.auth.getUser()
+            if (userError) {
+                alert(userError.message)
             } else {
                 id = user.id
-                console.log(user);
+                console.log(user.user_metadata.email);
 
-                document.getElementById('h1').textContent = `Welcome, ${user.user_metadata.display_name
-                    }`
+                const { data, error } = await client
+                    .from('userInfo')
+                    .select("*")
+                    .eq('email', user.user_metadata.email)
+
+                console.log(data[0].imgurl);
+                console.log(data[0]);
                 showprofile.innerHTML = `
-          <img src="${user.user_metadata.avatar_url}" alt="">
-          <div>
-            <h1>Name : ${user.user_metadata.display_name
+                    <div>
+                        <img src="${data[0].imgurl}" alt="" id="img">
+            <h1>Name : ${data[0].name
                     }</h1>
-            <p>Email : ${user.user_metadata.email}</p>
+            <p>Email : ${data[0].email}</p>
           </div>
         `
+                document.getElementById('h1').textContent = `Welcome, ${data[0].name}`
             }
         }
+
+
+
 
         render()
 

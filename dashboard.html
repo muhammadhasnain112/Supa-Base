@@ -92,6 +92,10 @@
     .date {
       float: right;
     }
+
+    .showimage {
+      border-radius: 14px;
+    }
   </style>
 </head>
 
@@ -108,6 +112,8 @@
   <div id="showinputs"></div>
   <div id="showposts"></div>
 
+
+
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script>
     const supabaseUrl = 'https://ipoviueuhflhqjemgfkw.supabase.co'
@@ -121,6 +127,8 @@
 
     function add() {
       showInputs.innerHTML = `
+       <label for="img">image</label>
+       <input type="file" id="img" placeholder="Enter your email" />
         <input type="text" placeholder="Enter a Title" id="title">
         <textarea id="disc" rows="4" placeholder="Enter Description"></textarea>
         <button onclick="upload()">Upload Post</button>
@@ -130,15 +138,55 @@
 
 
     let ID
+    let UID
+    // checkUID()
+    async function checkUID() {
+      const { data, error } = await supa
+        .from('user')
+        .select('*');
+      if (error) {
+        alert(error.message)
+      } else {
+        // alert(data[data.length - 1].title)
+        UID = data[data.length - 1].uniqueid
+      }
+    }
+
+    async function uploadImage(id) {
+      const fileInput = document.getElementById('img');
+      const file = fileInput.files[0];
+      if (!file) {
+        alert('Please select a file');
+        return;
+      }
+      const { data, error } = await supa.storage
+        .from('img')
+        .upload(`users/${id}`, file, {
+        });
+      if (error) {
+        console.error('Upload error:', error.message);
+        alert('Upload failed: ' + error.message);
+      } else {
+        console.log('Upload success:', data);
+        alert('Image uploaded successfully!');
+      }
+    }
+
+
+
+
+
+
     async function upload() {
+
+      // const fileInput = document.getElementById("img");
       async function Myinfo() {
         const { error, data: { user } } = await supa.auth.getUser()
         if (error) {
           alert(error.message)
         } else {
           ID = user.id
-          // console.log(ID);
-
+          // console.log(user.uniqueid);
 
         }
       }
@@ -151,13 +199,13 @@
         .from('user')
         .insert({ userid: ID, title: title.value, discription: discription.value, })
         .select();
-
       if (error) {
         alert(error.message);
       } else {
+        await checkUID()
+        await uploadImage(UID)
+        await showImage(UID)
         showInputs.innerHTML = '';
-        // console.log(ID);
-
         showPost();
       }
     }
@@ -173,6 +221,33 @@
     }
 
 
+    let publicurl
+    // showImage()
+    async function showImage(ed) {
+      const { error, data } = supa
+        .storage
+        .from('img')
+        .getPublicUrl(`users/${ed}`)
+      if (error) {
+        alert(error.message)
+      } else {
+        console.log(data.publicUrl);
+        publicurl = data.publicUrl
+        const { data: user, error: usererror } = await supa
+          .from('user')
+          .select('*');
+        if (usererror) {
+          alert(urlerror.message)
+        } else {
+          // alert(user[user.length - 1].id)
+        }
+        const { error: urlerror } = await supa
+          .from('user')
+          .update({ publicUrl: publicurl })
+          .eq('id', user[user.length - 1].id)
+      }
+    }
+
 
 
 
@@ -181,22 +256,22 @@
       const { data, error } = await supa
         .from('user')
         .select('*');
-
       if (error) {
         alert(error.message);
       } else {
         showPosts.innerHTML = '';
+        // console.log(data[0].id)
         data.forEach(element => {
           let date = element.created_at.slice(0, 10);
-          // console.log(date);
-
           const datetime = element.created_at;
           const timeFull = datetime.split('T')[1];
           const timeOnly = timeFull.split('.')[0];
-          // console.log(timeOnly);
+          console.log(element.publicUrl);
+
           showPosts.innerHTML += `
             <div>
-              <h2>${element.title}</h2>
+              <img alt="" width="70" src="${element.publicUrl}" class="showimage">
+              <h2>${element.title.slice(0, 1).toUpperCase() + element.title.slice(1)}</h2>
               <p>${element.discription}</p>
               <small>${timeOnly} </small> <small class="date"> ${date}</small>
             </div>
